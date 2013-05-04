@@ -1,21 +1,30 @@
 {
-  "name": "AH2013",
+  "name": "gaze",
   "manifest_version": 2,
   "version": "1.0",
-  "description": "Does Stuff",
-  /*"browser_action": {
-      	"default_icon": "icon.png"
-    },*/
+  "description": "watches you while you internet",
+  /*"browser_action": {	"default_icon": "icon.png" },*/
   "content_scripts": [ {
     "matches": ["<all_urls>"],
     "css": [],
     "js": [
-		"libs/js/jquery-1.9.1.min.js",
-		"libs/js/underscore-min.js"
-	]
+			/* libs */
+			"libs/js/jquery-1.9.1.min.js",
+			"libs/js/underscore-min.js",
+		
+			/* our stuff */
+			"camera-stream.js",
+			"listeners.js"
+		]
   }],
   "permissions": [
   ],
 
-  "options_page": "tracking-test.html"
+  "options_page": "tracking-test.html",
+
+	/*  event pages are the new background page equivalent */
+  "background": {
+    "scripts": ["event-model.js"],
+    "persistent": false
+  }
 }
