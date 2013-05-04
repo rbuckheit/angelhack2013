@@ -35,6 +35,8 @@
             var img_u8,work_canvas,work_ctx,ii_sum,ii_sqsum,ii_tilted,edg,ii_canny;
             var classifier = jsfeat.haar.frontalface;
 
+            var faceTracker;
+
             var max_work_size = 160;
 
             var smoother = new headtrackr.Smoother(0.35,  20);
@@ -71,6 +73,8 @@
                 ii_canny = new Int32Array((w+1)*(h+1));
 
                 options = new demo_opt();
+
+                faceTracker = new gazetrackr.FaceTracker(video);
             }
 
             function tick() {
@@ -82,31 +86,12 @@
                     work_ctx.drawImage(video, 0, 0, work_canvas.width, work_canvas.height);
                     var imageData = work_ctx.getImageData(0, 0, work_canvas.width, work_canvas.height);
 
-                    jsfeat.imgproc.grayscale(imageData.data, img_u8.data);
 
-                    // possible options
-                    if(options.equalize_histogram) {
-                        jsfeat.imgproc.equalize_histogram(img_u8, img_u8);
-                    }
-                    //jsfeat.imgproc.gaussian_blur(img_u8, img_u8, 3);
+                    faceTracker.process(imageData);
 
-                    jsfeat.imgproc.compute_integral_image(img_u8, ii_sum, ii_sqsum, classifier.tilted ? ii_tilted : null);
-
-                    if(options.use_canny) {
-                        jsfeat.imgproc.canny(img_u8, edg, 10, 50);
-                        jsfeat.imgproc.compute_integral_image(edg, ii_canny, null, null);
-                    }
-
-                    jsfeat.haar.edges_density = options.edges_density;
-                    var rects = jsfeat.haar.detect_multi_scale(ii_sum, ii_sqsum, ii_tilted, options.use_canny? ii_canny : null, img_u8.cols, img_u8.rows, classifier, options.scale_factor, options.min_scale);
-                    rects = jsfeat.haar.group_rectangles(rects, 1);
-
-                    // draw only most confident one
-                    var face = draw_faces(ctx, rects, canvasWidth/img_u8.cols, 1);
-                    var faceImageData = work_ctx.getImageData(face.x, face.y, face.width, face.height);
-
-                    var eyeRects = jsfeat.haar.detect_multi_scale(ii_sum, ii_sqsumm)
-
+                    var r = faceTracker.faceLocation;
+                    var sc = canvasWidth/img_u8.cols;
+                    ctx.strokeRect((r.x*sc)|0,(r.y*sc)|0,(r.width*sc)|0,(r.height*sc)|0);
                 }
             }
 
