@@ -31,6 +31,10 @@ function flush_cookies(domain) {
 	});
 }
 
+function close_tabs(domain) {
+	chrome.runtime.sendMessage({command: "closeTabs", domain:domain}, function(response) {});
+}
+
 function refresh_delayed() {
 	setTimeout(function() { window.location.href=window.location.href; }, 500);
 }
@@ -51,4 +55,6 @@ register_exit_hook({"url_pattern":"facebook"}, function(){
 	flush_cookies("facebook.com");
 	refresh_delayed();
 });
-
+register_exit_hook({"url_pattern":"justinbiebermusic.com"},function() {
+	close_tabs("justinbiebermusic");
+});

@@ -74,6 +74,18 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 		    }
 		});
 	}
+	
+	//=== TABS ===
+	if (request.command == "closeTabs") {
+		chrome.tabs.query({}, function(tabs) {
+			for (var i=0; i<tabs.length; i++) {
+				var tab = tabs[i];
+				if (new RegExp(request.domain).test(tab.url)) {
+					chrome.tabs.remove(tab.id);					
+				}
+			}
+		});	
+	}
 
 	sendResponse({response: "OK"});
 });
