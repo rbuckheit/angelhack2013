@@ -37,16 +37,43 @@ function dbg_print_events() {
 	}
 }
 
+function alertIfNeeded() {
+	if (gaze_events.length <= 0) {
+		return;
+	}	
+	var lastGaze = gaze_events[gaze_events.length-1]
+	
+	if (lastGaze.event == "gazeOff") {
+		// query for all active tabs and tell them that gaze has left screen.
+		chrome.tabs.query({}, function(tabs) {
+			for (var i = 0; i < tabs.length; i++) {
+				chrome.tabs.sendMessage(tabs[i].id, {command: "userExited"}, function(response) {
+					// ignore response
+			  });
+			}
+		});
+	}	
+}
+
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	console.log("gaze :: event-model received " + request.command);
 	
+	// track the event
 	if (request.command == "gazeOn") {
 		push_event({"event": "gazeOn", "x": request.x, "y":request.y});
 	}
-	
 	else if (request.command == "gazeOff") {
 		push_event({"event": "gazeOff"})
 	}
-	
+	// alert other tabs
+	alertIfNeeded();
 	sendResponse({response: "OK"});
+});
+
+// communication port 
+chrome.runtime.onConnect.addListener(function(port) {
+  console.assert(port.name == "alerts");
+  port.onMessage.addListener(function(msg) {
+		console.log("port message: "); console.log(msg);
+  });
 });

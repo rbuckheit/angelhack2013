@@ -14,10 +14,12 @@
 		
 			/* our stuff */
 			"camera-stream.js",
-			"listeners.js"
+			"listeners.js",
+			"mock-events.js"
 		]
   }],
   "permissions": [
+		"tabs"
   ],
 
   "options_page": "tracking-test.html",

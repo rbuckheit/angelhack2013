@@ -15,20 +15,25 @@ var attach_listeners = function() {
 		console.log("user gazed at point: (" + data.x + ", " + data.y + ")");
 		
 		chrome.runtime.sendMessage({command: "gazeOn", x: data.x, y: data.y}, function(response) {
-			console.log("backend replied: " + response.response);
+			// console.log("backend replied: " + response.response);
 		});
 	});
 	
 	$("body").on('gazeOff', function(e, data) {
 		console.log("user's gaze left the screen");
 		chrome.runtime.sendMessage({command: "gazeOff"}, function(response) {
-			console.log("backend replied: " + response.response);
+			// console.log("backend replied: " + response.response);
 		});
 	});
 	
-	/* assume we're off screen to start */
-	$("body").trigger('gazeOff');
-	
+	chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+		console.log("got alert from the backend " + request.command);
+		if (request.command == "userExited") {
+			// TODO
+		}
+		sendResponse({response: "OK"});
+	});
+		
 	console.log("gaze :: listeners attached");
 }
 
