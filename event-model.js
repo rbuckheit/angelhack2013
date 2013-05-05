@@ -55,14 +55,33 @@ function alertIfNeeded() {
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	console.log("gaze :: event-model received " + request.command);
 	
-	// track the event
+	//=== EVENT TRACKING ===
 	if (request.command == "gazeOn") {
 		push_event({"event": "gazeOn", "x": request.x, "y":request.y});
 	}
-	else if (request.command == "gazeOff") {
+	if (request.command == "gazeOff") {
 		push_event({"event": "gazeOff"})
+		// alert other tabs
+		alertIfNeeded();
 	}
-	// alert other tabs
-	alertIfNeeded();
+
+	//=== COOKIES ===
+	if (request.command == "flushCookies") {
+		var facebookDomain = "http://www.facebook.com";
+		// chrome.cookies.remove ( {"url": facebookDomain, "name": "act" } );
+		// 		chrome.cookies.remove ( {"url": facebookDomain, "name": "c_user" } );
+		// 		chrome.cookies.remove ( {"url": facebookDomain, "name": "checkpoint" } );
+		// 		chrome.cookies.remove ( {"url": facebookDomain, "name": "lu" } );
+		// 		chrome.cookies.remove ( {"url": facebookDomain, "name": "s" } );
+		// 		chrome.cookies.remove ( {"url": facebookDomain, "name": "sct" } );
+		// 		chrome.cookies.remove ( {"url": facebookDomain, "name": "xs" } );
+		chrome.cookies.getAll({domain: request.domain}, function(cookies) {
+		    for(var i=0; i<cookies.length;i++) {
+						chrome.cookies.remove({url: "http://" + request.domain + cookies[i].path, name: cookies[i].name});
+		        chrome.cookies.remove({url: "https://" + request.domain + cookies[i].path, name: cookies[i].name});
+		    }
+		});
+	}
+
 	sendResponse({response: "OK"});
 });

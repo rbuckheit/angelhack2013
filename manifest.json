@@ -3,7 +3,6 @@
   "manifest_version": 2,
   "version": "1.0",
   "description": "watches you while you internet",
-  /*"browser_action": {	"default_icon": "icon.png" },*/
   "content_scripts": [ {
     "matches": ["<all_urls>"],
     "css": [],
@@ -11,26 +10,28 @@
 			/* libs */
 			"libs/js/jquery-1.9.1.min.js",
 			"libs/js/underscore-min.js",
-
       "libs/js/compatibility.js",
       "libs/js/jsfeat.js",
       "libs/js/cascades/frontalface.js",
       "libs/js/headtrackr.js",
       "libs/js/gaze-tracking/attention-tracking.js",
+
 			/* our stuff */
-			"camera-stream.js",
 			"listeners.js",
 			"mock-events.js",
 			"attention-tracking-content-script.js",
-			"hooks/init.js"
+			"hooks.js",
+			"event-responder.js"
 		]
   }],
   "permissions": [
-		"tabs"
+		"tabs",
+		"cookies",
+		"http://*/*",
+    "https://*/*"
   ],
 
   "options_page": "attention-test.html",
-  // "options_page": "tracking-test.html",
 
   /*  event pages are the new background page equivalent */
   "background": {
