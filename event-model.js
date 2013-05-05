@@ -67,14 +67,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
 	//=== COOKIES ===
 	if (request.command == "flushCookies") {
-		var facebookDomain = "http://www.facebook.com";
-		// chrome.cookies.remove ( {"url": facebookDomain, "name": "act" } );
-		// 		chrome.cookies.remove ( {"url": facebookDomain, "name": "c_user" } );
-		// 		chrome.cookies.remove ( {"url": facebookDomain, "name": "checkpoint" } );
-		// 		chrome.cookies.remove ( {"url": facebookDomain, "name": "lu" } );
-		// 		chrome.cookies.remove ( {"url": facebookDomain, "name": "s" } );
-		// 		chrome.cookies.remove ( {"url": facebookDomain, "name": "sct" } );
-		// 		chrome.cookies.remove ( {"url": facebookDomain, "name": "xs" } );
 		chrome.cookies.getAll({domain: request.domain}, function(cookies) {
 		    for(var i=0; i<cookies.length;i++) {
 						chrome.cookies.remove({url: "http://" + request.domain + cookies[i].path, name: cookies[i].name});
