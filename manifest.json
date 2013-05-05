@@ -22,9 +22,10 @@
 		"tabs"
   ],
 
-  "options_page": "tracking-test.html",
+  "options_page": "attention-test.html",
+  // "options_page": "tracking-test.html",
 
-	/*  event pages are the new background page equivalent */
+  /*  event pages are the new background page equivalent */
   "background": {
     "scripts": ["event-model.js"],
     "persistent": false
