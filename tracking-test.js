@@ -75,6 +75,8 @@
                 options = new demo_opt();
 
                 faceTracker = new gazetrackr.FaceTracker(video);
+                console.log(faceTracker.canvas);
+                $("body").append($("<center></center>").append(faceTracker.canvas2));
             }
 
             function tick() {
@@ -89,8 +91,18 @@
 
                     faceTracker.process(imageData);
 
-                    var r = faceTracker.faceLocation;
                     var sc = canvasWidth/img_u8.cols;
+                    var r = faceTracker.faceLocation;
+                    drawRect(ctx, r, sc);
+                    r = faceTracker.rightEyeLocation;
+                    drawRect(ctx, r, sc);
+                    r = faceTracker.leftEyeLocation;
+                    drawRect(ctx, r, sc);
+                }
+            }
+
+            function drawRect(ctx, r, sc) {
+                if (r!= null) {
                     ctx.strokeRect((r.x*sc)|0,(r.y*sc)|0,(r.width*sc)|0,(r.height*sc)|0);
                 }
             }
