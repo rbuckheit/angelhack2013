@@ -41,15 +41,12 @@ function alertIfNeeded() {
 	if (gaze_events.length <= 0) {
 		return;
 	}	
-	var lastGaze = gaze_events[gaze_events.length-1]
-	
+	var lastGaze = gaze_events[gaze_events.length-1];
 	if (lastGaze.event == "gazeOff") {
 		// query for all active tabs and tell them that gaze has left screen.
 		chrome.tabs.query({}, function(tabs) {
 			for (var i = 0; i < tabs.length; i++) {
-				chrome.tabs.sendMessage(tabs[i].id, {command: "userExited"}, function(response) {
-					// ignore response
-			  });
+				chrome.tabs.sendMessage(tabs[i].id, {command: "userExited"}, function(response){});				
 			}
 		});
 	}	
@@ -69,12 +66,3 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	alertIfNeeded();
 	sendResponse({response: "OK"});
 });
-
-// communication port 
-chrome.runtime.onConnect.addListener(function(port) {
-  console.assert(port.name == "alerts");
-  port.onMessage.addListener(function(msg) {
-		console.log("port message: "); console.log(msg);
-  });
-});
-

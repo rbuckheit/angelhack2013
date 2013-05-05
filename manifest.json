@@ -21,8 +21,8 @@
 			"camera-stream.js",
 			"listeners.js",
 			"mock-events.js",
-
-      "attention-tracking-content-script.js"
+			"attention-tracking-content-script.js",
+			"hooks/init.js"
 		]
   }],
   "permissions": [

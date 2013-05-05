@@ -66,6 +66,8 @@ attentiontrackr.rectContains = function(containingRect, rect) {
 }
 
 attentiontrackr.FaceTracker.prototype.process = function(imageData) {
+	//  only update occasionally, otherwise this makes everything slow
+	if (new Date() - this.lastUpdate < 500) { return; }
 	
   jsfeat.imgproc.grayscale(imageData.data, this.img_u8.data);
 
