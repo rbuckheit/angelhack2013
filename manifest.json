@@ -11,11 +11,18 @@
 			/* libs */
 			"libs/js/jquery-1.9.1.min.js",
 			"libs/js/underscore-min.js",
-		
+
+      "libs/js/compatibility.js",
+      "libs/js/jsfeat.js",
+      "libs/js/cascades/frontalface.js",
+      "libs/js/headtrackr.js",
+      "libs/js/gaze-tracking/attention-tracking.js",
 			/* our stuff */
 			"camera-stream.js",
 			"listeners.js",
-			"mock-events.js"
+			"mock-events.js",
+
+      "attention-tracking-content-script.js"
 		]
   }],
   "permissions": [
